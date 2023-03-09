@@ -17,8 +17,6 @@ def healthcheck(request):
     out = subprocess.run("nvidia-smi", shell=True)
     if out.returncode == 0: # success state on shell command
         gpu = True
-    else:
-        gpu = False
 
     return response.json({"state": "healthy", "gpu": gpu})
 
