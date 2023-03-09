@@ -7,12 +7,6 @@ from PIL import Image
 from pytorch_model import BasicBlock, Classifier
 
 
-def to_numpy(tensor):
-    return (
-        tensor.detach().cpu().numpy() if tensor.requires_grad else tensor.cpu().numpy()
-    )
-
-
 class TestOnnxModel:
     # Fixtures
     @pytest.fixture
