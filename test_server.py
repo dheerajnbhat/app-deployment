@@ -1,27 +1,39 @@
-from model import OnnxClassifier
+from sanic import Sanic, response
+import subprocess
+import app as user_src
+
+# We do the model load-to-CPU step on server startup
+# so the model object is available globally for reuse
+user_src.init()
+
+# Create the http server app
+server = Sanic("my_app")
+
+# Healthchecks verify that the environment is correct on Banana Serverless
+@server.route('/healthcheck', methods=["GET"])
+def healthcheck(request):
+    # dependency free way to check if GPU is visible
+    gpu = False
+    out = subprocess.run("nvidia-smi", shell=True)
+    if out.returncode == 0: # success state on shell command
+        gpu = True
+    else:
+        gpu = False
+
+    return response.json({"state": "healthy", "gpu": gpu})
+
+# Inference POST handler at '/' is called for every http call from Banana
+@server.route('/', methods=["POST"]) 
+def inference(request):
+    try:
+        model_inputs = response.json.loads(request.json)
+    except:
+        model_inputs = request.json
+
+    output = user_src.inference(model_inputs)
+
+    return response.json(output)
 
 
-# Init is ran on server startup
-# Load your model to CPU as a global variable here using the variable name "model"
-def init():
-    global model
-
-    device = "cpu"
-    model = OnnxClassifier("models/onnx_model.onnx")
-
-
-# Inference is ran for every server call
-# Reference your preloaded global model variable here.
-def inference(model_inputs: dict) -> dict:
-    global model
-
-    # Parse out your arguments
-    image = model_inputs.get("image", None)
-    if image is None:
-        return {"message": "No image provided"}
-
-    # Run the model
-    result = model(image)
-
-    # Return the results as a dictionary
-    return result
+if __name__ == '__main__':
+    server.run(host='0.0.0.0', port=8000, workers=1)
