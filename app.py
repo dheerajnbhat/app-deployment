@@ -21,7 +21,7 @@ def inference(model_inputs: dict) -> dict:
         return {"message": "No image provided"}
 
     # Run the model
-    result = model(image)
+    result = model.predict(image)
 
     # Return the results as a dictionary
     return result
