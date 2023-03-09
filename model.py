@@ -30,6 +30,7 @@ class OnnxClassifier:
 
 
 # # load model class
+# # from model import OnnxClassifier
 # onnx_classifier = OnnxClassifier("models/onnx_model.onnx")
 
 # # get the images

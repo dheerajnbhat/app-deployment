@@ -36,7 +36,7 @@ class TestOnnxModel:
         torch_out = torch_model.forward(input_x)
         torch_out = torch.argmax(torch_out)
         # onnx model output
-        ort_inputs = {ort_session.get_inputs()[0].name: to_numpy(input_x)}
+        ort_inputs = {ort_session.get_inputs()[0].name: input_x.cpu().numpy()}
         ort_outs = ort_session.run(None, ort_inputs)
         ort_outs = np.argmax(ort_outs)
         assert ort_outs == torch_out
