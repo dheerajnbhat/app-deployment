@@ -30,12 +30,12 @@ class OnnxClassifier:
 
 
 # # load model class
-onnx_classifier = OnnxClassifier("models/onnx_model.onnx")
+# onnx_classifier = OnnxClassifier("models/onnx_model.onnx")
 
-# get the images
-img1 = Image.open("data/n01667114_mud_turtle.jpeg")
-img2 = Image.open("data/n01440764_tench.jpeg")
+# # get the images
+# img1 = Image.open("data/n01667114_mud_turtle.jpeg")
+# img2 = Image.open("data/n01440764_tench.jpeg")
 
-# predict output
-print("Output class for image 1 [turtle]:", onnx_classifier.predict(img1))
-print("Output class for image 2 [tench]:", onnx_classifier.predict(img2))
+# # predict output
+# print("Output class for image 1 [turtle]:", onnx_classifier.predict(img1))
+# print("Output class for image 2 [tench]:", onnx_classifier.predict(img2))
