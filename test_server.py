@@ -1,5 +1,8 @@
-from sanic import Sanic, response
 import subprocess
+import time
+
+from sanic import Sanic, response
+
 import app as user_src
 
 # We do the model load-to-CPU step on server startup
@@ -30,10 +33,15 @@ def inference(request):
     except:
         model_inputs = request.json
 
+    start = time.time()
     output = user_src.inference(model_inputs)
+    response_time = time.time() - start
 
-    return response.json(output)
+    result = {"class": str(output), "response_time": response_time}
+
+    return response.json(result)
 
 
 if __name__ == "__main__":
+    print("THIS IS FROM THE SERVER")
     server.run(host="0.0.0.0", port=8000, workers=1)

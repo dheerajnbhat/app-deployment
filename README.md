@@ -34,18 +34,17 @@ py.test test_onnx.py
 
 To run the inference on sample images, run the following code:
 ```
+import base64
 from model import OnnxClassifier, preprocess_numpy
 
 # load model class
 onnx_classifier = OnnxClassifier("models/onnx_model.onnx")
 
 # get the images
-img1 = Image.open("data/n01667114_mud_turtle.jpeg")
-img1 = preprocess_numpy(img1)
-img2 = Image.open("data/n01440764_tench.jpeg")
-img2 = preprocess_numpy(img2)
-
-# predict output
-print("Output class for image 1 [turtle]:", onnx_classifier.predict(img1))
-print("Output class for image 2 [tench]:", onnx_classifier.predict(img2))
+files = ["data/n01667114_mud_turtle.jpeg", "data/n01440764_tench.jpeg"]
+for file in files:
+    with open(file, "rb") as fp:
+        im_b64 = base64.b64encode(fp.read())
+    # predict output
+    print("Output class for image 1 [turtle]:", onnx_classifier.predict(im_b64))
 ```

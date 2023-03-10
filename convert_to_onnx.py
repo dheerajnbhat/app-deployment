@@ -4,7 +4,6 @@ from PIL import Image
 
 from pytorch_model import BasicBlock, Classifier
 
-
 if __name__ == "__main__":
     # load torch model
     torch_model = Classifier(BasicBlock, [2, 2, 2, 2])
